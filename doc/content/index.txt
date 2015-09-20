@@ -117,8 +117,7 @@ The ports provided by the component are described below:
 =============== =========== ============================== =======
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
-servo_id        InPort      RTC::TimedShort                
-angle           InPort      RTC::TimedLong                 
+servo_data      InPort      RTC::TimedVector2D             
 =============== =========== ============================== =======
 
 Examples

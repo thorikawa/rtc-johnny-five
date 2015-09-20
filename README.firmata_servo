@@ -11,7 +11,7 @@
 #   --module-category=Development --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
 #   --config=com_port:string:/dev/tty.USB0 
-#   --inport=servo_id:RTC::TimedShort --inport=angle:RTC::TimedLong 
+#   --inport=servo_data:RTC::TimedVector2D 
 
 
 ======================================================================
@@ -66,29 +66,11 @@ Lang Type:
 ======================================================================
 # <rtc-template block="inport">
 
-	Name:        servo_id
+	Name:        servo_data
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedShort
-	MaxOut: 
-	[Data Elements]
-		Name:
-		Type:            
-		Number:          
-		Semantics:       
-		Unit:            
-		Frequency:       
-		Operation Cycle: 
-		RangeLow:
-		RangeHigh:
-		DefaultValue:
-
-	Name:        angle
-	PortNumber:  1
-	Description: 
-	PortType: 
-	DataType:    RTC::TimedLong
+	DataType:    RTC::TimedVector2D
 	MaxOut: 
 	[Data Elements]
 		Name:

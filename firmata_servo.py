@@ -60,14 +60,10 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	def __init__(self, manager):
 		OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
 
-		self._d_servo_id = RTC.TimedShort(RTC.Time(0,0),0)
+		self._d_servo_data = RTC.TimedVector2D(RTC.Time(0,0),0)
 		"""
 		"""
-		self._servo_idIn = OpenRTM_aist.InPort("servo_id", self._d_servo_id)
-		self._d_angle = RTC.TimedLong(RTC.Time(0,0),0)
-		"""
-		"""
-		self._angleIn = OpenRTM_aist.InPort("angle", self._d_angle)
+		self._servo_dataIn = OpenRTM_aist.InPort("servo_data", self._d_servo_data)
 
 
 		
@@ -95,14 +91,11 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	# 
 	#
 	def onInitialize(self):
-		print "onInitialize"
-
 		# Bind variables and configuration variable
 		self.bindParameter("com_port", self._com_port, "/dev/tty.USB0")
 		
 		# Set InPort buffers
-		self.addInPort("servo_id",self._servo_idIn)
-		self.addInPort("angle",self._angleIn)
+		self.addInPort("servo_data",self._servo_dataIn)
 		
 		# Set OutPort buffers
 		
@@ -205,11 +198,10 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	#	#
 	def onExecute(self, ec_id):
 		print "onExecute"
-		if self._servo_idIn.isNew():
-			servoIdData = self._servo_idIn.read()
-			servoId = servoIdData.data
-			angleData = self._angleIn.read()
-			angle = angleData.data
+		if self._servo_dataIn.isNew():
+			servoData = self._servo_dataIn.read()
+			servoId = servoIdData.data.x
+			angle = angleData.data.y
 			print "%d %d" % (servoId, angle)
 			if servoId < len(self.pin) and angle <= 180 and angle >= 0:
 				self.pin[servoId].write(angle)
