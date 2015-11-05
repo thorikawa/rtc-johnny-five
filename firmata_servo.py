@@ -140,8 +140,9 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 				# Caution: Don't use board.get_pin('d:*:s') as it calls servo_config method with angle=0, which damages your servo.
 				self.pin[i] = self.board.digital[pinNumber[i]]
 			print "onStartup End"
-		except e:
+		except Exception as e:
 			print "some errors %s" % str(e)
+		self.pin[0].write(80)
 		return RTC.RTC_OK
 	
 	#	##
@@ -197,11 +198,11 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	#	#
 	#	#
 	def onExecute(self, ec_id):
-		print "onExecute"
 		if self._servo_dataIn.isNew():
+			print "onExecute New"
 			servoData = self._servo_dataIn.read()
-			servoId = servoIdData.data.x
-			angle = angleData.data.y
+			servoId = int(servoData.data.x)
+			angle = int(servoData.data.y)
 			print "%d %d" % (servoId, angle)
 			if servoId < len(self.pin) and angle <= 180 and angle >= 0:
 				self.pin[servoId].write(angle)
