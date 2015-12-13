@@ -130,19 +130,6 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	#	#
 	#	#
 	def onStartup(self, ec_id):
-		print "onStartup Begin"
-		pinNumber = [3, 5, 6, 7, 11]
-		self.pin = [None, None, None, None, None]
-		try:
-			self.board = Arduino('/dev/tty.usbmodem1411')
-			for i in range(5):
-				self.board.servo_config(pinNumber[i], angle=90)
-				# Caution: Don't use board.get_pin('d:*:s') as it calls servo_config method with angle=0, which damages your servo.
-				self.pin[i] = self.board.digital[pinNumber[i]]
-			print "onStartup End"
-		except Exception as e:
-			print "some errors %s" % str(e)
-		self.pin[0].write(80)
 		return RTC.RTC_OK
 	
 	#	##
@@ -169,9 +156,21 @@ class firmata_servo(OpenRTM_aist.DataFlowComponentBase):
 	#	# @return RTC::ReturnCode_t
 	#	#
 	#	#
-	#def onActivated(self, ec_id):
-	#
-	#	return RTC.RTC_OK
+	def onActivated(self, ec_id):
+		print "onActivated Begin"
+		pinNumber = [3, 5, 6, 7, 11]
+		self.pin = [None, None, None, None, None]
+		try:
+			self.board = Arduino(self._com_port[0])
+			for i in range(5):
+				self.board.servo_config(pinNumber[i], angle=90)
+				# Caution: Don't use board.get_pin('d:*:s') as it calls servo_config method with angle=0, which damages your servo.
+				self.pin[i] = self.board.digital[pinNumber[i]]
+			print "onActivated End"
+		except Exception as e:
+			print "some errors %s" % str(e)
+		self.pin[0].write(80)
+		return RTC.RTC_OK
 	
 	#	##
 	#	#
